@@ -1,18 +1,20 @@
 <template>
   <ul>
-    <li :key="mediaItem.id" v-for="mediaItem in mediaItems">
-      <figure>
-        <img :alt="mediaItem.description" :src="mediaItem.baseUrl">
-        <figcaption>{{ mediaItem.description }}</figcaption>
-      </figure>
-    </li>
+    <AlbumMediaItem
+      :key="mediaItem.id"
+      :media-item="mediaItem"
+      v-for="mediaItem in mediaItems"
+    />
   </ul>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
+import AlbumMediaItem from '@/components/AlbumMediaItem.vue'
 
-@Component
+@Component({
+  components: { AlbumMediaItem }
+})
 export default class Album extends Vue {
   @Prop(String) readonly albumId!: string;
 
@@ -62,14 +64,5 @@ ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
-}
-
-li:nth-child(odd) {
-  text-align: right;
-}
-
-img {
-  max-height: 25em;
-  max-width: 25em;
 }
 </style>

@@ -53,6 +53,11 @@ export default class App extends Vue {
 </script>
 
 <style>
+body,
+html {
+  margin: 0;
+}
+
 body {
   background-color: #202124;
   color: #e8eaed;
