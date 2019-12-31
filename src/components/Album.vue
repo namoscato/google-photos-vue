@@ -1,22 +1,34 @@
 <template>
-  <ul>
-    <AlbumMediaItem
-      :key="mediaItem.id"
-      :media-item="mediaItem"
-      v-for="mediaItem in mediaItems"
-    />
-  </ul>
+  <div>
+    <input type="radio" id="format-image" value="image" v-model="format">
+    <label for="format-image">Image</label>
+    <input type="radio" id="format-text" value="text" v-model="format">
+    <label for="format-text">Text</label>
+    <ul>
+      <AlbumMediaItem
+        :format="format"
+        :key="mediaItem.id"
+        :media-item="mediaItem"
+        v-for="mediaItem in mediaItems"
+      />
+    </ul>
+  </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import AlbumMediaItem from '@/components/AlbumMediaItem.vue'
+import { AlbumFormat } from '@/components/types'
 
 @Component({
-  components: { AlbumMediaItem }
+  components: {
+    AlbumMediaItem
+  }
 })
 export default class Album extends Vue {
   @Prop(String) readonly albumId!: string;
+
+  format: AlbumFormat = AlbumFormat.Image;
 
   mediaItems: gapi.client.photoslibrary.MediaItem[] = [];
 
@@ -64,5 +76,6 @@ ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
+  text-align: justify;
 }
 </style>
