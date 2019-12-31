@@ -1,29 +1,61 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+    <button
+      @click="logout()"
+      type="button"
+      v-if="isSignedIn">
+      Logout
+    </button>
+    <button
+      @click="login()"
+      type="button"
+      v-if="!isSignedIn">
+      Login
+    </button>
+    <SelectAlbum :is-signed-in="isSignedIn" v-model="selectedAlbumId" />
+    <hr>
+    <Album :album-id="selectedAlbumId" />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import HelloWorld from './components/HelloWorld.vue'
+import SelectAlbum from '@/components/SelectAlbum.vue'
+import Album from '@/components/Album.vue'
 
 @Component({
   components: {
-    HelloWorld
+    Album,
+    SelectAlbum
   }
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  isSignedIn: boolean = false;
+  selectedAlbumId: string = '';
+
+  created () {
+    this.$gapi.isSignedIn().then(this.onSignIn.bind(this))
+    this.$gapi.listenUserSignIn(this.onSignIn.bind(this))
+  }
+
+  login () {
+    this.$gapi.login(function () {})
+  }
+
+  logout () {
+    this.$gapi.logout(function () {})
+  }
+
+  private onSignIn (isSignedIn: boolean) {
+    this.isSignedIn = isSignedIn
+  }
+}
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+body {
+  background-color: #202124;
+  color: #e8eaed;
+  font-family: "Helvetica Neue", sans-serif;
 }
 </style>
