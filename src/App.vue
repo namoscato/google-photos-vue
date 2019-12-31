@@ -7,6 +7,7 @@
       Logout
     </button>
     <button
+      :disabled="isSignedIn === null"
       @click="login()"
       type="button"
       v-if="!isSignedIn">
@@ -30,7 +31,7 @@ import Album from '@/components/Album.vue'
   }
 })
 export default class App extends Vue {
-  isSignedIn: boolean = false;
+  isSignedIn: boolean|null = null;
   selectedAlbumId: string = '';
 
   created () {

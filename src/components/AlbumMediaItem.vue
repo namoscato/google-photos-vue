@@ -4,10 +4,10 @@
     :style="style"
     :title="description">
     <img
-      :alt="description"
+      :alt="descriptionTheme"
       :src="mediaItem.baseUrl"
       v-if="'image' === format">
-    <span v-else>{{ themeText }}</span>
+    <span v-else>{{ descriptionTheme }}</span>
   </li>
 </template>
 
@@ -29,7 +29,7 @@ export default class AlbumMediaItem extends Vue {
 
   backgroundColor: string = BACKGROUND_COLOR;
   color: string = COLOR;
-  themeText: string = '';
+  descriptionTheme: string = '';
 
   get description () {
     const description = this.mediaItem.description
@@ -38,38 +38,41 @@ export default class AlbumMediaItem extends Vue {
   }
 
   get style () {
-    return AlbumFormat.Image === this.format
-      ? { 'background-color': this.backgroundColor }
-      : { color: this.color }
+    if (AlbumFormat.Image === this.format) {
+      return { 'background-color': this.backgroundColor }
+    }
+
+    return {
+      color: this.color,
+      'font-weight': 100 * (Math.floor(Math.random() * 7) + 1)
+    }
+  }
+
+  private static getRandomColor (hex: string, delta: number) {
+    return color(hex).lightness(Math.random() * 2 * delta - delta, true).hex()
   }
 
   created () {
     this.backgroundColor = AlbumMediaItem.getRandomColor(BACKGROUND_COLOR, BACKGROUND_COLOR_DELTA)
     this.color = AlbumMediaItem.getRandomColor(COLOR, COLOR_DELTA)
 
-    const description = this.description
-
-    if (description) {
-      const normalizedDescription = description.replace(/[\u201C\u201D]/g, '"')
-
-      if (normalizedDescription.split('"').length !== 3) {
-        console.warn('Unexpected description format', description)
-      }
-
-      const matches = normalizedDescription.match(/[^"]*"([^"]+)"[^"]*/)
-
-      if (matches === null) {
-        console.warn('Unable to parse description theme', description)
-      }
-
-      this.themeText = `${matches === null ? description : matches[1]} `
+    if (this.description) {
+      this.descriptionTheme = `${this.extractDescriptionTheme(this.description)} `
     } else {
-      console.warn('Media item does not have description', this.mediaItem.baseUrl)
+      console.warn('Media item does not have description', this.mediaItem)
     }
   }
 
-  private static getRandomColor (hex: string, delta: number) {
-    return color(hex).lightness(Math.random() * 2 * delta - delta, true).hex()
+  private extractDescriptionTheme (description: string) {
+    let normalizedDescription = description.replace(/[\u201C\u201D]/g, '"')
+
+    const matches = normalizedDescription.match(/[^"]*"([^"]+)"[^"]*/)
+
+    if (normalizedDescription.split('"').length !== 3 || matches === null) {
+      console.warn('Potentially unable to parse description', { description, baseUrl: this.mediaItem.baseUrl })
+    }
+
+    return matches === null ? description : matches[1]
   }
 }
 </script>
