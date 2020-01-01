@@ -6,7 +6,7 @@
     <img
       :alt="descriptionTheme"
       :src="mediaItem.baseUrl"
-      v-if="'image' === format">
+      v-if="'photo' === format">
     <span v-else>{{ descriptionTheme }}</span>
   </li>
 </template>
@@ -38,7 +38,7 @@ export default class AlbumMediaItem extends Vue {
   }
 
   get style () {
-    if (AlbumFormat.Image === this.format) {
+    if (AlbumFormat.Photo === this.format) {
       return { 'background-color': this.backgroundColor }
     }
 
@@ -78,7 +78,7 @@ export default class AlbumMediaItem extends Vue {
 </script>
 
 <style scoped>
-li.is-image {
+li.is-photo {
   float: left;
   overflow: hidden;
   padding-bottom: 33.333333333%;
@@ -97,7 +97,7 @@ li.is-text:hover {
   text-decoration: underline;
 }
 
-li.is-image > img {
+li.is-photo > img {
   height: 100%;
   object-fit: cover;
   position: absolute;
@@ -111,14 +111,14 @@ li.is-image > img {
 }
 
 @media screen and (min-width: 30em) {
-  li.is-image {
+  li.is-photo {
     padding-bottom: 20%;
     width: 20%;
   }
 }
 
 @media screen and (min-width: 40em) {
-  li.is-image {
+  li.is-photo {
     padding-bottom: 16.666666667%;
     width: 16.666666667%;
   }
@@ -129,14 +129,14 @@ li.is-image > img {
 }
 
 @media screen and (min-width: 50em) {
-  li.is-image {
+  li.is-photo {
     padding-bottom: 12.5%;
     width: 12.5%;
   }
 }
 
 @media screen and (min-width: 60em) {
-  li.is-image {
+  li.is-photo {
     padding-bottom: 10%;
     width: 10%;
   }
@@ -147,14 +147,14 @@ li.is-image > img {
 }
 
 @media screen and (min-width: 70em) {
-  li.is-image {
+  li.is-photo {
     padding-bottom: 8.3333333333%;
     width: 8.3333333333%;
   }
 }
 
 @media screen and (min-width: 91em) {
-  li.is-image {
+  li.is-photo {
     padding-bottom: 6.666666666666667%;
     width: 6.666666666666667%;
   }

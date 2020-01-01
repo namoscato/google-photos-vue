@@ -1,9 +1,14 @@
 <template>
-  <div>
-    <input type="radio" id="format-image" value="image" v-model="format">
-    <label for="format-image">Image</label>
-    <input type="radio" id="format-text" value="text" v-model="format">
-    <label for="format-text">Text</label>
+  <div v-if="album">
+    <div class="header">
+      <h1>{{ album.title }}</h1>
+      <div class="format-controls">
+        <input type="radio" id="format-image" value="photo" v-model="format">
+        <label for="format-image">Photo</label>
+        <input type="radio" id="format-text" value="text" v-model="format">
+        <label for="format-text">Text</label>
+      </div>
+    </div>
     <ul>
       <AlbumMediaItem
         :format="format"
@@ -28,8 +33,8 @@ import { AlbumFormat } from '@/components/types'
 export default class Album extends Vue {
   @Prop(String) readonly albumId!: string;
 
-  format: AlbumFormat = AlbumFormat.Image;
-
+  album: gapi.client.photoslibrary.Album|null = null;
+  format: AlbumFormat = AlbumFormat.Photo;
   mediaItems: gapi.client.photoslibrary.MediaItem[] = [];
 
   created () {
@@ -45,8 +50,13 @@ export default class Album extends Vue {
     if (albumId) {
       this.$gapi.getGapiClient().then(() => {
         this.fetchMediaItems(albumId)
+
+        gapi.client.photoslibrary.albums.get({ albumId }).then((response) => {
+          this.album = response.result
+        })
       })
     } else {
+      this.album = null
       this.mediaItems = []
     }
   }
@@ -72,10 +82,49 @@ export default class Album extends Vue {
 </script>
 
 <style scoped>
+.header {
+  margin: 1.5em 0;
+  padding: 0 1em;
+  position: relative;
+}
+
+h1 {
+  font-size: 2em;
+  font-weight: 200;
+  margin: 0;
+}
+
+.format-controls {
+  line-height: 2;
+}
+
+input[type="radio"] {
+  opacity: 0;
+  position: fixed;
+}
+
+label {
+  opacity: .5;
+  margin-right: 2em;
+  cursor: pointer;
+}
+
+input[type="radio"]:checked + label {
+  opacity: 1;
+}
+
 ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
   text-align: justify;
+}
+
+@media screen and (min-width: 30em) {
+  .format-controls {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
 }
 </style>

@@ -1,4 +1,4 @@
 export enum AlbumFormat {
-  Image = 'image',
+  Photo = 'photo',
   Text = 'text',
 }
