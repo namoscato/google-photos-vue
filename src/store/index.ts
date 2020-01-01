@@ -1,22 +1,19 @@
 import Vue from 'vue'
 import Vuex, { StoreOptions } from 'vuex'
-import albums from '@/store/modules/albums'
-import google, { GoogleState } from '@/store/modules/google'
+import photos, { PhotosState } from '@/store/modules/photos'
 import createLogger from 'vuex/dist/logger'
 
 Vue.use(Vuex)
 
 export interface State {
-  albums: any,
-  google: GoogleState
+  photos: PhotosState
 }
 
 const debug = process.env.NODE_ENV !== 'production'
 
 const store: StoreOptions<State> = {
   modules: {
-    albums,
-    google
+    photos
   },
   strict: debug,
   plugins: debug ? [createLogger()] : []

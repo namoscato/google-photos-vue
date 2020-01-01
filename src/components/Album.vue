@@ -24,21 +24,22 @@
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import AlbumMediaItem from '@/components/AlbumMediaItem.vue'
 import { AlbumFormat } from '@/components/types'
-import { mapActions, mapState } from 'vuex'
-import { State } from '@/store'
+import { createNamespacedHelpers } from 'vuex'
 import MediaItem = gapi.client.photoslibrary.MediaItem;
+
+const { mapActions, mapState } = createNamespacedHelpers('photos')
 
 @Component({
   components: {
     AlbumMediaItem
   },
-  computed: mapState<State>('albums', [
+  computed: mapState([
     'album',
     'mediaItems'
   ]),
-  methods: mapActions('albums', {
-    getAlbum: 'get'
-  })
+  methods: mapActions([
+    'getAlbum'
+  ])
 })
 export default class Album extends Vue {
   @Prop(String) readonly albumId!: string;
@@ -49,14 +50,6 @@ export default class Album extends Vue {
 
   @Watch('albumId')
   getAlbum!: Function;
-
-  created () {
-    this.$gapi.listenUserSignIn((isSignedIn: boolean) => {
-      if (!isSignedIn) {
-        this.mediaItems = []
-      }
-    })
-  }
 }
 </script>
 

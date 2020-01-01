@@ -15,18 +15,19 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
-import { mapActions, mapState } from 'vuex'
-import { State } from '@/store'
+import { createNamespacedHelpers } from 'vuex'
 import Album = gapi.client.photoslibrary.Album;
 
+const { mapActions, mapState } = createNamespacedHelpers('photos')
+
 @Component({
-  computed: mapState<State>({
-    albums: (state: State) => state.albums.all,
-    isSignedIn: (state: State) => state.google.isSignedIn
-  }),
-  methods: mapActions('albums', {
-    listAlbums: 'list'
-  })
+  computed: mapState([
+    'albums',
+    'isSignedIn'
+  ]),
+  methods: mapActions([
+    'listAlbums'
+  ])
 })
 export default class SelectAlbum extends Vue {
   readonly albums!: Album[];

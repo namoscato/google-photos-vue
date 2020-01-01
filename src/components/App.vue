@@ -1,19 +1,7 @@
 <template>
   <div id="app">
-    <button
-      @click="logout()"
-      type="button"
-      v-if="isSignedIn">
-      Logout
-    </button>
-    <button
-      :disabled="isSignedIn === null"
-      @click="login()"
-      type="button"
-      v-if="!isSignedIn">
-      Login
-    </button>
-    <SelectAlbum :is-signed-in="isSignedIn" v-model="selectedAlbumId" />
+    <Login />
+    <SelectAlbum v-model="selectedAlbumId" />
     <hr>
     <Album :album-id="selectedAlbumId" />
   </div>
@@ -23,17 +11,21 @@
 import { Component, Vue } from 'vue-property-decorator'
 import SelectAlbum from '@/components/SelectAlbum.vue'
 import Album from '@/components/Album.vue'
-import { mapActions, mapState } from 'vuex'
+import { createNamespacedHelpers } from 'vuex'
+import Login from '@/components/Login.vue'
+
+const { mapActions, mapState } = createNamespacedHelpers('photos')
 
 @Component({
   components: {
+    Login,
     Album,
     SelectAlbum
   },
-  computed: mapState('google', [
+  computed: mapState([
     'isSignedIn'
   ]),
-  methods: mapActions('google', [
+  methods: mapActions([
     'signIn'
   ])
 })
@@ -46,14 +38,6 @@ export default class App extends Vue {
   created () {
     this.$gapi.isSignedIn().then(this.signIn)
     this.$gapi.listenUserSignIn(this.signIn)
-  }
-
-  login () {
-    this.$gapi.login(function () {})
-  }
-
-  logout () {
-    this.$gapi.logout(function () {})
   }
 }
 </script>
