@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueGApi from 'vue-gapi'
-import App from '@/App.vue'
+import store from '@/store'
+import App from '@/components/App.vue'
+import googlePhotos from '@/api/google-photos'
 
 Vue.config.productionTip = false
 
@@ -11,5 +13,9 @@ Vue.use(VueGApi, {
 })
 
 new Vue({
-  render: h => h(App)
+  created () {
+    googlePhotos.initialize(this.$gapi) // TODO figure out a better way to do this
+  },
+  render: h => h(App),
+  store
 }).$mount('#app')

@@ -15,29 +15,29 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
+import { mapActions, mapState } from 'vuex'
+import { State } from '@/store'
+import Album = gapi.client.photoslibrary.Album;
 
-@Component({})
+@Component({
+  computed: mapState<State>({
+    albums: (state: State) => state.albums.all,
+    isSignedIn: (state: State) => state.google.isSignedIn
+  }),
+  methods: mapActions('albums', {
+    listAlbums: 'list'
+  })
+})
 export default class SelectAlbum extends Vue {
-  @Prop(Boolean) readonly isSignedIn!: boolean;
+  readonly albums!: Album[];
+  readonly isSignedIn!: boolean;
   @Prop(String) readonly value!: string;
 
-  albums: gapi.client.photoslibrary.Album[] = [];
+  @Watch('isSignedIn')
+  listAlbums!: Function;
 
   created () {
-    this.fetchAlbums()
-  }
-
-  @Watch('isSignedIn')
-  private fetchAlbums () {
-    if (this.isSignedIn) {
-      this.$gapi.getGapiClient().then((gapi) => {
-        gapi.client.photoslibrary.albums.list({}).then((response) => {
-          this.albums = response.result.albums!
-        })
-      })
-    } else {
-      this.albums = []
-    }
+    this.listAlbums()
   }
 }
 </script>

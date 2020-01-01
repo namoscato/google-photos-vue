@@ -24,58 +24,37 @@
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import AlbumMediaItem from '@/components/AlbumMediaItem.vue'
 import { AlbumFormat } from '@/components/types'
+import { mapActions, mapState } from 'vuex'
+import { State } from '@/store'
+import MediaItem = gapi.client.photoslibrary.MediaItem;
 
 @Component({
   components: {
     AlbumMediaItem
-  }
+  },
+  computed: mapState<State>('albums', [
+    'album',
+    'mediaItems'
+  ]),
+  methods: mapActions('albums', {
+    getAlbum: 'get'
+  })
 })
 export default class Album extends Vue {
   @Prop(String) readonly albumId!: string;
 
-  album: gapi.client.photoslibrary.Album|null = null;
+  album!: gapi.client.photoslibrary.Album|null;
   format: AlbumFormat = AlbumFormat.Photo;
-  mediaItems: gapi.client.photoslibrary.MediaItem[] = [];
+  mediaItems!: MediaItem[];
+
+  @Watch('albumId')
+  getAlbum!: Function;
 
   created () {
     this.$gapi.listenUserSignIn((isSignedIn: boolean) => {
       if (!isSignedIn) {
         this.mediaItems = []
       }
-    })
-  }
-
-  @Watch('albumId')
-  onAlbumIdChange (albumId: string) {
-    if (albumId) {
-      this.$gapi.getGapiClient().then(() => {
-        this.fetchMediaItems(albumId)
-
-        gapi.client.photoslibrary.albums.get({ albumId }).then((response) => {
-          this.album = response.result
-        })
-      })
-    } else {
-      this.album = null
-      this.mediaItems = []
-    }
-  }
-
-  private fetchMediaItems (albumId: string, pageToken?: string) {
-    return gapi.client.photoslibrary.mediaItems.search({
-      resource: {
-        albumId,
-        pageSize: 100,
-        pageToken
-      }
-    }).then((response) => {
-      const nextPageToken = response.result.nextPageToken
-
-      if (nextPageToken) {
-        this.fetchMediaItems(albumId, nextPageToken)
-      }
-
-      this.mediaItems = this.mediaItems.concat(response.result.mediaItems!)
     })
   }
 }

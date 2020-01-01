@@ -15,6 +15,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import color from 'onecolor'
 import { AlbumFormat } from '@/components/types'
+import MediaItem = gapi.client.photoslibrary.MediaItem;
 
 const BACKGROUND_COLOR = '#202124'
 const BACKGROUND_COLOR_DELTA = 0.1
@@ -24,7 +25,7 @@ const COLOR_DELTA = 0.25
 
 @Component
 export default class AlbumMediaItem extends Vue {
-  @Prop(Object) readonly mediaItem!: gapi.client.photoslibrary.MediaItem;
+  @Prop(Object) readonly mediaItem!: MediaItem;
   @Prop(String) readonly format!: AlbumFormat;
 
   backgroundColor: string = BACKGROUND_COLOR;

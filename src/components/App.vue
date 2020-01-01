@@ -23,20 +23,29 @@
 import { Component, Vue } from 'vue-property-decorator'
 import SelectAlbum from '@/components/SelectAlbum.vue'
 import Album from '@/components/Album.vue'
+import { mapActions, mapState } from 'vuex'
 
 @Component({
   components: {
     Album,
     SelectAlbum
-  }
+  },
+  computed: mapState('google', [
+    'isSignedIn'
+  ]),
+  methods: mapActions('google', [
+    'signIn'
+  ])
 })
 export default class App extends Vue {
-  isSignedIn: boolean|null = null;
+  isSignedIn!: boolean|null;
   selectedAlbumId: string = '';
 
+  signIn!: (isSignedIn: boolean) => void
+
   created () {
-    this.$gapi.isSignedIn().then(this.onSignIn.bind(this))
-    this.$gapi.listenUserSignIn(this.onSignIn.bind(this))
+    this.$gapi.isSignedIn().then(this.signIn)
+    this.$gapi.listenUserSignIn(this.signIn)
   }
 
   login () {
@@ -45,10 +54,6 @@ export default class App extends Vue {
 
   logout () {
     this.$gapi.logout(function () {})
-  }
-
-  private onSignIn (isSignedIn: boolean) {
-    this.isSignedIn = isSignedIn
   }
 }
 </script>
