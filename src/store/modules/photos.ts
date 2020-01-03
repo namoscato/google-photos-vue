@@ -53,7 +53,7 @@ const actions: ActionTree<PhotosState, State> = {
 }
 
 function searchMediaItems (commit: Commit, albumId: string, pageToken?: string) {
-  return googlePhotos.searchMediaItems(albumId, pageToken).then(function (response) {
+  googlePhotos.searchMediaItems(albumId, pageToken).then(function (response) {
     commit(pageToken ? 'addMediaItems' : 'setMediaItems', response.mediaItems)
 
     const nextPageToken = response.nextPageToken

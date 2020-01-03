@@ -1,28 +1,34 @@
 <template>
   <div id="app">
-    <Login />
-    <SelectAlbum v-model="selectedAlbumId" />
-    <hr>
+    <div v-if="!externalStatePath">
+      <Login />
+      <SelectAlbum v-model="selectedAlbumId" />
+      <TextareaExternalState v-if="selectedAlbumId" />
+      <hr>
+    </div>
     <Album :album-id="selectedAlbumId" />
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import SelectAlbum from '@/components/SelectAlbum.vue'
 import Album from '@/components/Album.vue'
 import { createNamespacedHelpers } from 'vuex'
 import Login from '@/components/Login.vue'
+import TextareaExternalState from '@/components/TextareaExternalState.vue'
 
 const { mapActions, mapState } = createNamespacedHelpers('photos')
 
 @Component({
   components: {
+    TextareaExternalState,
     Login,
     Album,
     SelectAlbum
   },
   computed: mapState([
+    'album',
     'isSignedIn'
   ]),
   methods: mapActions([
@@ -30,14 +36,26 @@ const { mapActions, mapState } = createNamespacedHelpers('photos')
   ])
 })
 export default class App extends Vue {
-  isSignedIn!: boolean|null;
+  @Prop(String) readonly externalStatePath!: string|null
+  readonly isSignedIn!: boolean|null;
+
+  defaultTitle: string = '';
   selectedAlbumId: string = '';
 
   signIn!: (isSignedIn: boolean) => void
 
   created () {
-    this.$gapi.isSignedIn().then(this.signIn)
-    this.$gapi.listenUserSignIn(this.signIn)
+    if (this.$gapi) {
+      this.$gapi.isSignedIn().then(this.signIn)
+      this.$gapi.listenUserSignIn(this.signIn)
+    }
+
+    this.defaultTitle = document.title
+  }
+
+  @Watch('album')
+  onAlbumChange (album: gapi.client.photoslibrary.Album|null) {
+    document.title = album && album.title ? album.title : this.defaultTitle
   }
 }
 </script>
