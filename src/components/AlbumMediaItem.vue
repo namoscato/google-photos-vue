@@ -2,15 +2,17 @@
   <li
     :class="['is-' + format]"
     :title="description">
-    <AlbumMediaItemImage
-      :description-theme="descriptionTheme"
-      :media-item="mediaItem"
-      v-if="'photo' === format"
-    />
-    <AlbumMediaItemText
-      :description-theme="descriptionTheme"
-      v-else
-    />
+    <a @click="viewMediaItem(mediaItem)">
+      <AlbumMediaItemImage
+        :description-theme="descriptionTheme"
+        :media-item="mediaItem"
+        v-if="'photo' === format"
+      />
+      <AlbumMediaItemText
+        :description-theme="descriptionTheme"
+        v-else
+      />
+    </a>
   </li>
 </template>
 
@@ -19,10 +21,16 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 import { AlbumFormat } from '@/components/types'
 import AlbumMediaItemImage from '@/components/AlbumMediaItemImage.vue'
 import AlbumMediaItemText from '@/components/AlbumMediaItemText.vue'
+import { createNamespacedHelpers } from 'vuex'
 import MediaItem = gapi.client.photoslibrary.MediaItem;
 
+const { mapActions } = createNamespacedHelpers('photos')
+
 @Component({
-  components: { AlbumMediaItemText, AlbumMediaItemImage }
+  components: { AlbumMediaItemText, AlbumMediaItemImage },
+  methods: mapActions([
+    'viewMediaItem'
+  ])
 })
 export default class AlbumMediaItem extends Vue {
   @Prop(Object) readonly mediaItem!: MediaItem;
@@ -76,6 +84,10 @@ li.is-text {
 
 li.is-text:hover {
   text-decoration: underline;
+}
+
+li > a {
+  cursor: pointer;
 }
 
 @media screen and (min-width: 20em) {

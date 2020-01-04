@@ -8,6 +8,7 @@ export interface PhotosState {
   album: Album|null
   albums: Album[]
   isSignedIn: boolean|null
+  mediaItem: MediaItem|null
   mediaItems: MediaItem[]
 }
 
@@ -15,6 +16,7 @@ const state: PhotosState = {
   album: null,
   albums: [],
   isSignedIn: null,
+  mediaItem: null,
   mediaItems: []
 }
 
@@ -47,6 +49,9 @@ const actions: ActionTree<PhotosState, State> = {
       commit('setAlbums', albums)
     })
   },
+  viewMediaItem ({ commit }, mediaItem: MediaItem|null = null) {
+    commit('setMediaItem', mediaItem)
+  },
   signIn ({ commit }, isSignedIn) {
     commit('setIsSignedIn', isSignedIn)
   }
@@ -77,6 +82,9 @@ const mutations: MutationTree<PhotosState> = {
   },
   addMediaItems (state, mediaItems) {
     state.mediaItems = state.mediaItems.concat(mediaItems)
+  },
+  setMediaItem (state, mediaItem) {
+    state.mediaItem = mediaItem
   },
   setIsSignedIn (state, isSignedIn) {
     state.isSignedIn = isSignedIn
