@@ -2,7 +2,7 @@
   <li
     :class="['is-' + format]"
     :title="description">
-    <a @click="viewMediaItem(mediaItem)">
+    <a @click="view()">
       <AlbumMediaItemImage
         :description-theme="descriptionTheme"
         :media-item="mediaItem"
@@ -37,6 +37,7 @@ export default class AlbumMediaItem extends Vue {
   @Prop(String) readonly format!: AlbumFormat;
 
   descriptionTheme: string = '';
+  viewMediaItem!: (mediaItem: MediaItem|null) => void;
 
   get description () {
     const description = this.mediaItem.description
@@ -50,6 +51,11 @@ export default class AlbumMediaItem extends Vue {
     } else {
       console.warn('Media item does not have description', this.mediaItem)
     }
+  }
+
+  view () {
+    this.viewMediaItem(this.mediaItem)
+    this.$gtag.event('Click', { event_category: this.format, event_label: this.descriptionTheme })
   }
 
   private extractDescriptionTheme (description: string) {

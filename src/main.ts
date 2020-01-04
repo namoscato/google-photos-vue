@@ -3,6 +3,7 @@ import VueGApi from 'vue-gapi'
 import store from '@/store'
 import App from '@/components/App.vue'
 import googlePhotos from '@/api/google-photos'
+import VueGtag from 'vue-gtag'
 
 Vue.config.productionTip = false
 
@@ -20,6 +21,10 @@ if (externalStatePath) {
     scope: 'https://www.googleapis.com/auth/photoslibrary.readonly'
   })
 }
+
+Vue.use(VueGtag, {
+  config: { id: 'UA-17188743-25' }
+})
 
 new Vue({
   created () {
