@@ -1,35 +1,33 @@
 <template>
   <li
     :class="['is-' + format]"
-    :style="style"
     :title="description">
-    <img
-      :alt="descriptionTheme"
-      :src="mediaItem.baseUrl"
-      v-if="'photo' === format">
-    <span v-else>{{ descriptionTheme }}</span>
+    <AlbumMediaItemImage
+      :description-theme="descriptionTheme"
+      :media-item="mediaItem"
+      v-if="'photo' === format"
+    />
+    <AlbumMediaItemText
+      :description-theme="descriptionTheme"
+      v-else
+    />
   </li>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import color from 'onecolor'
 import { AlbumFormat } from '@/components/types'
+import AlbumMediaItemImage from '@/components/AlbumMediaItemImage.vue'
+import AlbumMediaItemText from '@/components/AlbumMediaItemText.vue'
 import MediaItem = gapi.client.photoslibrary.MediaItem;
 
-const BACKGROUND_COLOR = '#202124'
-const BACKGROUND_COLOR_DELTA = 0.1
-
-const COLOR = '#a7a7a7'
-const COLOR_DELTA = 0.25
-
-@Component
+@Component({
+  components: { AlbumMediaItemText, AlbumMediaItemImage }
+})
 export default class AlbumMediaItem extends Vue {
   @Prop(Object) readonly mediaItem!: MediaItem;
   @Prop(String) readonly format!: AlbumFormat;
 
-  backgroundColor: string = BACKGROUND_COLOR;
-  color: string = COLOR;
   descriptionTheme: string = '';
 
   get description () {
@@ -38,25 +36,7 @@ export default class AlbumMediaItem extends Vue {
     return description ? description.trim() : ''
   }
 
-  get style () {
-    if (AlbumFormat.Photo === this.format) {
-      return { 'background-color': this.backgroundColor }
-    }
-
-    return {
-      color: this.color,
-      'font-weight': 100 * (Math.floor(Math.random() * 7) + 1)
-    }
-  }
-
-  private static getRandomColor (hex: string, delta: number) {
-    return color(hex).lightness(Math.random() * 2 * delta - delta, true).hex()
-  }
-
   created () {
-    this.backgroundColor = AlbumMediaItem.getRandomColor(BACKGROUND_COLOR, BACKGROUND_COLOR_DELTA)
-    this.color = AlbumMediaItem.getRandomColor(COLOR, COLOR_DELTA)
-
     if (this.description) {
       this.descriptionTheme = `${this.extractDescriptionTheme(this.description)} `
     } else {
@@ -96,13 +76,6 @@ li.is-text {
 
 li.is-text:hover {
   text-decoration: underline;
-}
-
-li.is-photo > img {
-  height: 100%;
-  object-fit: cover;
-  position: absolute;
-  width: 100%;
 }
 
 @media screen and (min-width: 20em) {

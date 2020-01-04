@@ -15,6 +15,7 @@
       "src/types"
     ],
     "types": [
+      "gapi.client.photoslibrary",
       "webpack-env"
     ],
     "paths": {
