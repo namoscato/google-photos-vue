@@ -9,19 +9,31 @@ import { State } from '@/store'
 @Component({})
 export default class TextareaExternalState extends Vue {
   get state () {
+    const filenameCountMap: { [filename: string]: number } = {}
     const state: State = JSON.parse(JSON.stringify(this.$store.state))
     const baseUrlDirectory = `${document.title.replace('/', '_')}_files`
 
     state.photos.albums = []
 
     state.photos.mediaItems = state.photos.mediaItems.map(function (mediaItem) {
-      const filenameParts = mediaItem.filename!.replace('~', '_').split('.')
+      let filename = mediaItem.filename!
+      const lastDot = filename.lastIndexOf('.')
+      let extension = filename.substring(1 + lastDot, filename.length)
 
-      if (filenameParts[filenameParts.length - 1] === 'HEIC') {
-        filenameParts[filenameParts.length - 1] = 'jpg'
+      if (extension === 'HEIC') {
+        extension = 'jpg'
       }
 
-      mediaItem.baseUrl = `${baseUrlDirectory}/${filenameParts.join('.')}`
+      filename = filename.substring(0, lastDot).replace('~', '_')
+      const filenameNormalized = filename.toLowerCase()
+
+      if (typeof filenameCountMap[filenameNormalized] !== 'undefined') {
+        filename += `(${filenameCountMap[filenameNormalized]++})`
+      } else {
+        filenameCountMap[filenameNormalized] = 1
+      }
+
+      mediaItem.baseUrl = `${baseUrlDirectory}/${filename}.${extension}`
 
       return mediaItem
     })
