@@ -5,7 +5,7 @@ on:
     branches: [gh-pages-src]
 
 jobs:
-  lint:
+  deploy:
 
     runs-on: ubuntu-latest
 
