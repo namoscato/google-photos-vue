@@ -28,7 +28,7 @@ Vue.use(VueGtag, {
 
 new Vue({
   created () {
-    googlePhotos.initialize(this.$gapi) // TODO figure out a better way to do this
+    googlePhotos.initialize(this.$gapi)
   },
   render: h => h(App, {
     props: {

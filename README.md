@@ -4,7 +4,7 @@
 
 ## Features
 
-### Format
+### Formats
 
 #### Photo
 
@@ -17,3 +17,31 @@ Conventional grid.
 ![Text Format](https://i.imgur.com/dTq6KLU.png)
 
 Justified layout highlighting the "quoted" word (i.e. theme) in each photo description.
+
+### Contexts
+
+#### Authenticated
+
+The default state initializes [`gapi`](https://github.com/google/google-api-javascript-client). Once authenticated, the
+user can select one of their albums, and its full contents is loaded.
+
+#### Unauthenticated
+
+[Vuex](https://vuex.vuejs.org/) application state JSON is exposed in the authenticated context. The state is modified
+with relative base URLs that are compatible with the naming conventions of page assets when saved via Google Chrome.
+
+When downloaded, served, and configured, i.e.
+
+```html
+<div id="app" data-external-state-path="365-2019-state.json"></div>
+```
+
+the Vue.js application functions in an unauthenticated context, initialized with this static state.
+
+A working example of this context can be seen in the
+[`gh-pages-src`](https://github.com/namoscato/google-photos-vue/compare/gh-pages-src) branch, which is built and served
+via GitHub Pages.
+
+### Analytics
+
+Media clicks are instrumented with [Google Analytics Events](https://support.google.com/analytics/answer/1033068).
