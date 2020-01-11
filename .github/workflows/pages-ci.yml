@@ -21,4 +21,4 @@ jobs:
         user_name: ${{ github.actor }}
         user_email: ${{ github.actor }}@users.noreply.github.com
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.ACTIONS_PERSONAL_ACCESS_TOKEN }}
