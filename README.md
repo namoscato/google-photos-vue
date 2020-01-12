@@ -44,4 +44,21 @@ via GitHub Pages.
 
 ### Analytics
 
-Media clicks are instrumented with [Google Analytics Events](https://support.google.com/analytics/answer/1033068).
+Media clicks are instrumented with [Google Analytics Events](https://support.google.com/analytics/answer/1033068)
+when configured.
+
+## Usage
+
+1. [Setup Google OAuth 2.0](https://support.google.com/googleapi/answer/6158849) and include your Client ID in
+[`main.ts`](src/main.ts).
+
+2. Optionally [setup Google Analytics](https://support.google.com/analytics/answer/1008080) and include your ID in
+[`main.ts`](src/main.ts).
+
+3. Build the application via:
+
+    ```
+    npm run serve
+    ```
+
+    or other [Vue CLI](https://cli.vuejs.org/guide/cli-service.html) commands.

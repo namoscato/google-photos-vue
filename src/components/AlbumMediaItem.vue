@@ -55,7 +55,10 @@ export default class AlbumMediaItem extends Vue {
 
   view () {
     this.viewMediaItem(this.mediaItem)
-    this.$gtag.event('Click', { event_category: this.format, event_label: this.descriptionTheme })
+
+    if (typeof this.$gtag !== 'undefined') {
+      this.$gtag.event('Click', { event_category: this.format, event_label: this.descriptionTheme })
+    }
   }
 
   private extractDescriptionTheme (description: string) {
