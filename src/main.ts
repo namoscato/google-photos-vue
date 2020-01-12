@@ -10,14 +10,14 @@ import VueGtag from 'vue-gtag'
  *
  * @see https://support.google.com/googleapi/answer/6158849
  */
-const GOOGLE_OAUTH2_CLIENT_ID = 'TODO'
+const GOOGLE_OAUTH2_CLIENT_ID = '643157340864-6dlup4og9711115j4phha6meqp02hd6b.apps.googleusercontent.com'
 
 /**
  * Optional Google Analytics ID
  *
  * @see https://support.google.com/analytics/answer/1008080
  */
-const GOOGLE_ANALYTICS_ID = null
+const GOOGLE_ANALYTICS_ID = 'UA-17188743-25'
 
 Vue.config.productionTip = false
 
