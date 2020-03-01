@@ -31,11 +31,11 @@ export default class Login extends Vue {
   readonly isSignedIn!: boolean|null;
 
   login () {
-    this.$gapi.login(function () {})
+    this.$gapi.login()
   }
 
   logout () {
-    this.$gapi.logout(function () {})
+    this.$gapi.logout()
   }
 }
 </script>
