@@ -3,16 +3,20 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator'
-import { getRandomColor } from '@/utils'
+import { getRandomColor } from '@/utils';
+import { props } from "vue-class-component";
 
 const COLOR = '#a7a7a7'
 const COLOR_DELTA = 0.25
 
-@Component
-export default class AlbumMediaItemText extends Vue {
-  @Prop(String) readonly descriptionTheme!: string;
+const Props = props({
+  descriptionTheme: {
+    type: String,
+    required: true
+  }
+});
 
+export default class AlbumMediaItemText extends Props {
   color: string = getRandomColor(COLOR, COLOR_DELTA);
 
   get style () {

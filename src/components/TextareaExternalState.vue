@@ -3,10 +3,9 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import { State } from '@/store'
+import { State } from '@/store';
+import { Vue } from "vue-class-component";
 
-@Component({})
 export default class TextareaExternalState extends Vue {
   get state () {
     const filenameCountMap: { [filename: string]: number } = {}

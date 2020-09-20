@@ -17,25 +17,34 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator'
-import { AlbumFormat } from '@/components/types'
-import AlbumMediaItemImage from '@/components/AlbumMediaItemImage.vue'
-import AlbumMediaItemText from '@/components/AlbumMediaItemText.vue'
-import { createNamespacedHelpers } from 'vuex'
+import { AlbumFormat } from '@/components/types';
+import AlbumMediaItemImage from '@/components/AlbumMediaItemImage.vue';
+import AlbumMediaItemText from '@/components/AlbumMediaItemText.vue';
+import { createNamespacedHelpers } from 'vuex';
+import { Options, props } from "vue-class-component";
+import { PropType } from 'vue';
 import MediaItem = gapi.client.photoslibrary.MediaItem;
 
 const { mapActions } = createNamespacedHelpers('photos')
 
-@Component({
+const Props = props({
+  mediaItem: {
+    type: Object as PropType<MediaItem>,
+    required: true
+  },
+  format: {
+    type: Object as PropType<AlbumFormat>,
+    required: true
+  }
+});
+
+@Options({
   components: { AlbumMediaItemText, AlbumMediaItemImage },
   methods: mapActions([
     'viewMediaItem'
   ])
 })
-export default class AlbumMediaItem extends Vue {
-  @Prop(Object) readonly mediaItem!: MediaItem;
-  @Prop(String) readonly format!: AlbumFormat;
-
+export default class AlbumMediaItem extends Props {
   descriptionTheme: string = '';
   viewMediaItem!: (mediaItem: MediaItem|null) => void;
 
@@ -56,9 +65,9 @@ export default class AlbumMediaItem extends Vue {
   view () {
     this.viewMediaItem(this.mediaItem)
 
-    if (typeof this.$gtag !== 'undefined') {
-      this.$gtag.event('Click', { event_category: this.format, event_label: this.descriptionTheme })
-    }
+    // if (typeof this.$gtag !== 'undefined') {
+    //   this.$gtag.event('Click', { event_category: this.format, event_label: this.descriptionTheme })
+    // }
   }
 
   private extractDescriptionTheme (description: string) {

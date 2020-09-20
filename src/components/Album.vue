@@ -26,15 +26,23 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
-import AlbumMediaItem from '@/components/AlbumMediaItem.vue'
-import { AlbumFormat } from '@/components/types'
-import { createNamespacedHelpers } from 'vuex'
+import { Watch } from 'vue-property-decorator';
+import AlbumMediaItem from '@/components/AlbumMediaItem.vue';
+import { AlbumFormat } from '@/components/types';
+import { createNamespacedHelpers } from 'vuex';
+import { Options, props } from "vue-class-component";
 import MediaItem = gapi.client.photoslibrary.MediaItem;
 
 const { mapActions, mapState } = createNamespacedHelpers('photos')
 
-@Component({
+const Props = props({
+  albumId: {
+    type: String,
+    required: true
+  }
+});
+
+@Options({
   components: {
     AlbumMediaItem
   },
@@ -48,9 +56,7 @@ const { mapActions, mapState } = createNamespacedHelpers('photos')
     'viewMediaItem'
   ])
 })
-export default class Album extends Vue {
-  @Prop(String) readonly albumId!: string;
-
+export default class Album extends Props {
   album!: gapi.client.photoslibrary.Album|null;
   format: AlbumFormat = AlbumFormat.Photo;
   mediaItem!: MediaItem|null;

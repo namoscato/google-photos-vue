@@ -14,13 +14,21 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
-import { createNamespacedHelpers } from 'vuex'
+import { Watch } from 'vue-property-decorator';
+import { createNamespacedHelpers } from 'vuex';
+import { Options, props } from "vue-class-component";
 import Album = gapi.client.photoslibrary.Album;
 
 const { mapActions, mapState } = createNamespacedHelpers('photos')
 
-@Component({
+const Props = props({
+  value: {
+    type: String,
+    required: true
+  }
+});
+
+@Options({
   computed: mapState([
     'albums',
     'isSignedIn'
@@ -29,10 +37,9 @@ const { mapActions, mapState } = createNamespacedHelpers('photos')
     'listAlbums'
   ])
 })
-export default class SelectAlbum extends Vue {
+export default class SelectAlbum extends Props {
   readonly albums!: Album[];
   readonly isSignedIn!: boolean;
-  @Prop(String) readonly value!: string;
 
   @Watch('isSignedIn')
   listAlbums!: Function;

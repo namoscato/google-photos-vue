@@ -17,12 +17,12 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import { createNamespacedHelpers } from 'vuex'
+import { createNamespacedHelpers } from 'vuex';
+import { Options, Vue } from "vue-class-component";
 
 const { mapState } = createNamespacedHelpers('photos')
 
-@Component({
+@Options({
   computed: mapState([
     'isSignedIn'
   ])
@@ -31,11 +31,11 @@ export default class Login extends Vue {
   readonly isSignedIn!: boolean|null;
 
   login () {
-    this.$gapi.login()
+    // this.$gapi.login()
   }
 
   logout () {
-    this.$gapi.logout()
+    // this.$gapi.logout()
   }
 }
 </script>

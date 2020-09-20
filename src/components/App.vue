@@ -11,16 +11,23 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
-import SelectAlbum from '@/components/SelectAlbum.vue'
-import Album from '@/components/Album.vue'
-import { createNamespacedHelpers } from 'vuex'
-import Login from '@/components/Login.vue'
-import TextareaExternalState from '@/components/TextareaExternalState.vue'
+import { Watch } from 'vue-property-decorator';
+import SelectAlbum from '@/components/SelectAlbum.vue';
+import Album from '@/components/Album.vue';
+import { createNamespacedHelpers } from 'vuex';
+import Login from '@/components/Login.vue';
+import TextareaExternalState from '@/components/TextareaExternalState.vue';
+import { Options, props } from "vue-class-component";
 
 const { mapActions, mapState } = createNamespacedHelpers('photos')
 
-@Component({
+const Props = props({
+  externalStatePath: {
+    type: String
+  }
+});
+
+@Options({
   components: {
     TextareaExternalState,
     Login,
@@ -35,8 +42,7 @@ const { mapActions, mapState } = createNamespacedHelpers('photos')
     'signIn'
   ])
 })
-export default class App extends Vue {
-  @Prop(String) readonly externalStatePath!: string|null
+export default class App extends Props {
   readonly isSignedIn!: boolean|null;
 
   defaultTitle: string = '';
@@ -45,10 +51,10 @@ export default class App extends Vue {
   signIn!: (isSignedIn: boolean) => void
 
   created () {
-    if (this.$gapi) {
-      this.$gapi.isSignedIn().then(this.signIn)
-      this.$gapi.listenUserSignIn(this.signIn)
-    }
+    // if (this.$gapi) {
+    //   this.$gapi.isSignedIn().then(this.signIn)
+    //   this.$gapi.listenUserSignIn(this.signIn)
+    // }
 
     this.defaultTitle = document.title
   }

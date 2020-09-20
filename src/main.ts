@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import Vue, { createApp, h } from 'vue';
 import VueGApi from 'vue-gapi'
 import store from '@/store'
 import App from '@/components/App.vue'
@@ -19,8 +19,6 @@ const GOOGLE_OAUTH2_CLIENT_ID = 'TODO'
  */
 const GOOGLE_ANALYTICS_ID = null
 
-Vue.config.productionTip = false
-
 const elementId = 'app'
 const externalStatePath = document.getElementById(elementId)!.dataset.externalStatePath
 
@@ -29,28 +27,30 @@ if (externalStatePath) {
     return response.json().then(store.replaceState.bind(store))
   })
 } else {
-  Vue.use(VueGApi, {
-    discoveryDocs: ['https://photoslibrary.googleapis.com/$discovery/rest?version=v1'],
-    clientId: GOOGLE_OAUTH2_CLIENT_ID,
-    scope: 'https://www.googleapis.com/auth/photoslibrary.readonly'
-  })
+  // Vue.use(VueGApi, {
+  //   discoveryDocs: ['https://photoslibrary.googleapis.com/$discovery/rest?version=v1'],
+  //   clientId: GOOGLE_OAUTH2_CLIENT_ID,
+  //   scope: 'https://www.googleapis.com/auth/photoslibrary.readonly'
+  // })
 }
 
 // noinspection PointlessBooleanExpressionJS
 if (GOOGLE_ANALYTICS_ID) {
-  Vue.use(VueGtag, {
-    config: { id: GOOGLE_ANALYTICS_ID }
-  })
+  // Vue.use(VueGtag, {
+  //   config: { id: GOOGLE_ANALYTICS_ID }
+  // })
 }
 
-new Vue({
-  created () {
-    googlePhotos.initialize(this.$gapi)
+const app = createApp(App, {
+  created() {
+    console.log('init')
+    // googlePhotos.initialize(this.$gapi)
   },
-  render: h => h(App, {
-    props: {
-      externalStatePath
-    }
-  }),
-  store
-}).$mount(`#${elementId}`)
+  props: {
+    externalStatePath
+  }
+});
+
+app.use(store);
+app.mount(`#${elementId}`);
+

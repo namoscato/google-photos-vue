@@ -1,9 +1,5 @@
-import Vue from 'vue'
-import Vuex, { StoreOptions } from 'vuex'
-import photos, { PhotosState } from '@/store/modules/photos'
-import createLogger from 'vuex/dist/logger'
-
-Vue.use(Vuex)
+import { createLogger, createStore, StoreOptions } from 'vuex';
+import photos, { PhotosState } from '@/store/modules/photos';
 
 export interface State {
   photos: PhotosState
@@ -19,4 +15,4 @@ const store: StoreOptions<State> = {
   plugins: debug ? [createLogger()] : []
 }
 
-export default new Vuex.Store<State>(store)
+export default createStore(store);
