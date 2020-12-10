@@ -21,7 +21,7 @@
     "@types/gapi.client": "^1.0.3",
     "@types/gapi.client.photoslibrary": "^1.0.0",
     "@types/vue-router": "^2.0.0",
-    "@typescript-eslint/eslint-plugin": "^4.6.0",
+    "@typescript-eslint/eslint-plugin": "^4.9.1",
     "@typescript-eslint/parser": "^4.1.1",
     "@vue/cli-plugin-babel": "^4.5.6",
     "@vue/cli-plugin-eslint": "^4.5.6",
